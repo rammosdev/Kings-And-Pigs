@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     public Animator anima;
     [Header("Atributos")]
     [SerializeField]private float speed;
+    [SerializeField] private float jumpForce;
     private float health;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Movimentação();
+        Pulo();
     }
 
     public void Movimentação()
@@ -33,11 +35,17 @@ public class PlayerController : MonoBehaviour
             //Se o movimento for positivo, a escala vai ser 1
             //Se o movimento for negativo, a escala vai ser -1
             transform.localScale = new Vector3(Mathf.Sign(move), 1f, 1f);
-            anima.SetBool("Running", true);
+        }
+        anima.SetBool("Running", move != 0);
+    }
 
-        } else
+    public void Pulo()
+    {
+        var jump = Input.GetButtonDown("Jump");
+
+        if (jump)
         {
-            anima.SetBool("Running", false);
+            rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpForce);
         }
     }
 }
